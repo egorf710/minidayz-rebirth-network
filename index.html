@@ -1,0 +1,154 @@
+<html lang="eng">
+<head>
+<meta charset="utf-8" />
+<title>Minidayz Rebirth Network</title>
+<link rel="stylesheet" href="style.css" />
+
+<script src="https://code.jquery.com/jquery-3.6.3.min.js"></script>
+
+</head>
+<body>
+  <p id="main-title" style="text-align: center">Minidayz Rebirth Network</p>
+    <div class="login-page">
+        <div class="form">
+          <form class="register-form">
+            <!--<input type="text" placeholder="name"/>-->
+            <input class="reg email" type="text" placeholder="email"/>
+            <input class="reg password" type="password" placeholder="password"/>
+            <input class="confirm reg password" type="password" placeholder="confirm password"/>
+            <button class="CREATE">create</button>
+            <p class="message">Already registered? <a href="#">Sign In</a></p>
+          </form>
+          <form class="login-form">
+            <input class="log email" type="text" placeholder="email"/>
+            <input class="log password" type="password" placeholder="password"/>
+            <button class="LOGIN">login</button>
+            <p class="message">Not registered? <a href="#">Create an account</a></p>
+          </form>
+        </div>
+      </div>
+
+</body>
+
+<script type="text/javascript" src="javascript.js"></script>
+
+
+<script type="module">
+    // Import the functions you need from the SDKs you need
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/9.15.0/firebase-app.js";
+    import { getDatabase, set, ref, update } from "https://www.gstatic.com/firebasejs/9.15.0/firebase-database.js";
+    import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword, sendEmailVerification, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/9.15.0/firebase-auth.js";
+    // TODO: Add SDKs for Firebase products that you want to use
+    // https://firebase.google.com/docs/web/setup#available-libraries
+  
+    // Your web app's Firebase configuration
+    const firebaseConfig = {
+      apiKey: "AIzaSyDQbZHOQTEGBK8Vks2eD66z8v35gVkuRpU",
+      authDomain: "minidayz-rebirth-network.firebaseapp.com",
+      databaseURL: "https://minidayz-rebirth-network-default-rtdb.firebaseio.com",
+      projectId: "minidayz-rebirth-network",
+      storageBucket: "minidayz-rebirth-network.appspot.com",
+      messagingSenderId: "319533565272",
+      appId: "1:319533565272:web:21dcc188ffc38df47c112d"
+    };
+  
+    // Initialize Firebase
+    const app = initializeApp(firebaseConfig);
+    const auth = getAuth();
+
+    $('.CREATE').click(function(){
+      var email = document.getElementsByClassName("reg email")[0].value;
+      var password = document.getElementsByClassName("reg password")[0].value;
+      var confirm_password = document.getElementsByClassName("confirm reg password")[0].value;
+      if(password != confirm_password){ alert('The password was not confirmed correctly\nНе верно подтвердили пароль'); return;}
+      createUserWithEmailAndPassword(auth, email, password)
+      .then((userCredential) => {
+      // Signed in 
+        const user = userCredential.user;
+        alert(user.email+'\nFollow the link in the email to confirm your email\nПерейдите по ссылке в письме что бы подтвердить вашу почту');
+        // ...
+        sendEmailVerification(userCredential.user);
+      })
+      .catch((error) => {
+        const errorCode = error.code;
+        const errorMessage = error.message;
+
+        alert(errorMessage);
+      // ..
+      });
+    });
+
+
+  $('.LOGIN').click(function() {
+    var email = document.getElementsByClassName('log email')[0].value;
+    var password = document.getElementsByClassName('log password')[0].value;
+        signInWithEmailAndPassword(auth, email, password)
+        .then((userCredential) => {
+          // Signed in 
+          const user = userCredential.user;
+
+          alert('You have successfully logged in, you are a beta tester\nВы успешно вошли, вы бета тестерUser loged in!');
+          // ...
+        })
+        .catch((error) => {
+          const errorCode = error.code;
+          const errorMessage = error.message;
+
+          alert(errorMessage);
+    });
+
+});
+
+ login.addEventListener('click',(e)=>{
+   var email = document.getElementById('email').value;
+   var password = document.getElementById('password').value;
+
+      signInWithEmailAndPassword(auth, email, password)
+      .then((userCredential) => {
+        // Signed in 
+        const user = userCredential.user;
+         alert('User loged in!');
+        // ...
+      })
+      .catch((error) => {
+        const errorCode = error.code;
+        const errorMessage = error.message;
+
+        alert(errorMessage);
+  });
+
+ });
+
+const user = auth.currentUser;
+onAuthStateChanged(auth, (user) => {
+  if (user) {
+    // User is signed in, see docs for a list of available properties
+    // https://firebase.google.com/docs/reference/js/firebase.User
+    const uid = user.uid;
+    //bla bla bla
+    // ...
+  } else {
+    // User is signed out
+    // ...
+    //bla bla bla
+  }
+});
+
+logout.addEventListener('click',(e)=>{
+
+   signOut(auth).then(() => {
+     // Sign-out successful.
+     alert('user loged out');
+   }).catch((error) => {
+     // An error happened.
+     const errorCode = error.code;
+     const errorMessage = error.message;
+
+        alert(errorMessage);
+   });
+
+});
+
+  </script>
+
+</html>
